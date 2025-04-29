@@ -7,24 +7,14 @@ interface EnvConfig {
   projectId: string;
   region: string;
   bucketName: string;
+  prefix: string;
 }
 
-const configs: Record<string, EnvConfig> = {
-  dev: {
-    projectId: "your-dev-project-id",
-    region: "us-central1",
-    bucketName: "cdktf-dev-bucket",
-  },
-  prod: {
-    projectId: "your-prod-project-id",
-    region: "us-central1",
-    bucketName: "cdktf-prod-bucket",
-  },
-};
 
 class MyStack extends TerraformStack {
-  constructor(scope: Construct, id: string, envConfig: EnvConfig) {
-    super(scope, id);
+  constructor(scope: Construct, env: "dev" | "prod" = "dev") {
+    super(scope, env);
+    const envConfig: EnvConfig = scope.node.tryGetContext(env);
 
     new GoogleProvider(this, "google", {
       project: envConfig.projectId,
@@ -37,7 +27,7 @@ class MyStack extends TerraformStack {
     });
 
     new LocalBackend(this, {
-      path: `terraform-${id}.tfstate`,
+      path: `terraform-${env}.tfstate`,
     });
 
     new TerraformOutput(this, "bucket_name", {
@@ -48,13 +38,8 @@ class MyStack extends TerraformStack {
 
 const app = new App();
 
-const environment = process.env.ENVIRONMENT ?? "dev";
-const envConfig = configs[environment];
+const environment = (process.env.ENV === "prod" ? "prod" : "dev")
 
-if (!envConfig) {
-  throw new Error(`Invalid ENVIRONMENT: ${environment}`);
-}
-
-new MyStack(app, environment, envConfig);
+new MyStack(app, environment);
 
 app.synth();

@@ -7,5 +7,18 @@
     "hashicorp/google@~>4.0"
   ],
   "terraformModules": [],
-  "context": {}
+  "context": {
+    "prod": {
+      "projectId": "your-prod-project-id",
+      "region": "asia-northeast1",
+      "bucketName": "cdktf-prod-bucket",
+      "prefix": "terraform/state"
+    },
+    "dev": {
+      "projectId": "your-dev-project-id",
+      "region": "asia-northeast1",
+      "bucketName": "cdktf-dev-bucket",
+      "prefix": "terraform/state"
+    }
+  }
 }
