@@ -36,9 +36,40 @@ To get started:
 - Run a command twice to hit cache
 ```
 
+## Preparing tools
+
+Run the following command to install tools:
+
+```sh
+npm install -g cdktf-cli
+brew install terraform
+```
+
 ## Setting up the environment
 
+1. Create a new package:
 
+```sh
+mkdir packages/infra
+cd packages/infra
+```
+
+2. Initialize CDKTF project:
+
+```sh
+cdktf init --template=typescript --local --project-name="infra" --providers="google@~>4.0"
+
+? Project Description A simple getting started project for cdktf.
+? Do you want to start from an existing Terraform project? no
+? Do you want to send crash reports to the CDKTF team? Refer to 
+https://developer.hashicorp.com/terraform/cdktf/create-and-deploy/configuration-file#enable-crash-reporting-for-the-cli for more information yes
+```
+
+3. Synthesize Terraform files:
+
+```sh
+pnpm run synth
+```
 
 ### Build
 
