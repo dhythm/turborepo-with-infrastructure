@@ -45,6 +45,11 @@ npm install -g cdktf-cli
 brew install terraform
 ```
 
+```sh
+gcloud auth application-default login
+gcloud config get-value project
+```
+
 ## Setting up the environment
 
 1. Create a new package:
@@ -68,21 +73,11 @@ https://developer.hashicorp.com/terraform/cdktf/create-and-deploy/configuration-
 3. Synthesize Terraform files:
 
 ```sh
-pnpm run synth
+pnpm run --filter=infra synth
 ```
 
-### Build
+4. Deploy resources:
 
-To build all apps and packages, run the following command:
-
-```
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-pnpm dev
+```sh
+pnpm run --filter=infra deploy
 ```

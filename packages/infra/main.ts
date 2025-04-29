@@ -1,61 +1,60 @@
 import { Construct } from "constructs";
-import { App, TerraformOutput, TerraformStack } from "cdktf";
+import { App, TerraformStack, TerraformOutput, LocalBackend } from "cdktf";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
-import { ComputeInstance } from "@cdktf/provider-google/lib/compute-instance";
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
 
 interface EnvConfig {
   projectId: string;
-  projectNumber: string;
   region: string;
   bucketName: string;
 }
 
+const configs: Record<string, EnvConfig> = {
+  dev: {
+    projectId: "your-dev-project-id",
+    region: "us-central1",
+    bucketName: "cdktf-dev-bucket",
+  },
+  prod: {
+    projectId: "your-prod-project-id",
+    region: "us-central1",
+    bucketName: "cdktf-prod-bucket",
+  },
+};
 
 class MyStack extends TerraformStack {
-  constructor(scope: Construct, env: "dev" | "prod" = "dev") {
-    super(scope, env);
-    const envConfig: EnvConfig = scope.node.tryGetContext(env);
+  constructor(scope: Construct, id: string, envConfig: EnvConfig) {
+    super(scope, id);
 
     new GoogleProvider(this, "google", {
       project: envConfig.projectId,
       region: envConfig.region,
     });
 
-    const bucket = new StorageBucket(this, "StateBucket", {
+    new StorageBucket(this, "bucket", {
       name: envConfig.bucketName,
       location: envConfig.region,
-      versioning: {
-        enabled: true,
-      },
     });
 
-    new ComputeInstance(this, "vm-instance", {
-      name: "cdktf-vm",
-      machineType: "e2-micro",
-      bootDisk: {
-        initializeParams: {
-          image: "debian-cloud/debian-11",
-        },
-      },
-      networkInterface: [{
-        network: "default",
-        accessConfig: [{}],
-      }],
+    new LocalBackend(this, {
+      path: `terraform-${id}.tfstate`,
     });
 
     new TerraformOutput(this, "bucket_name", {
-      value: bucket.name,
+      value: envConfig.bucketName,
     });
   }
 }
 
-
-
 const app = new App();
 
-const env = (process.env.ENV || "dev") as "dev" | "prod";
+const environment = process.env.ENVIRONMENT ?? "dev";
+const envConfig = configs[environment];
 
-new MyStack(app, env);
+if (!envConfig) {
+  throw new Error(`Invalid ENVIRONMENT: ${environment}`);
+}
+
+new MyStack(app, environment, envConfig);
 
 app.synth();
