@@ -79,5 +79,11 @@ pnpm run --filter=infra synth
 4. Deploy resources:
 
 ```sh
-pnpm run --filter=infra deploy
+pnpm run --filter=infra deploy dev
+```
+
+## Terminate
+
+```sh
+pnpm run --filter=infra destroy dev
 ```

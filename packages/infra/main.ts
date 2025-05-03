@@ -2,6 +2,8 @@ import { Construct } from "constructs";
 import { App, TerraformStack, TerraformOutput, LocalBackend } from "cdktf";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
+import { TerraformVariable } from "cdktf";
+
 
 interface EnvConfig {
   projectId: string;
@@ -11,13 +13,18 @@ interface EnvConfig {
 }
 
 
+
 class MyStack extends TerraformStack {
   constructor(scope: Construct, env: "dev" | "prod" = "dev") {
     super(scope, env);
     const envConfig: EnvConfig = scope.node.tryGetContext(env);
 
+    const projectId = new TerraformVariable(this, "PROJECT_ID", {
+      type: "string",
+    });
+
     new GoogleProvider(this, "google", {
-      project: envConfig.projectId,
+      project: projectId.value,
       region: envConfig.region,
     });
 
@@ -33,8 +40,11 @@ class MyStack extends TerraformStack {
     new TerraformOutput(this, "bucket_name", {
       value: envConfig.bucketName,
     });
+
+
   }
 }
+
 
 const app = new App();
 
