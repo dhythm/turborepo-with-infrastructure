@@ -3,6 +3,12 @@ import { Construct } from "constructs";
 import { App, TerraformStack, TerraformOutput, LocalBackend } from "cdktf";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
+import {  } from '@cdktf/provider-archive';
+import { ArchiveProvider } from '@cdktf/provider-archive/lib/provider';
+import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
+import path = require('path');
+import { StorageBucketObject } from '@cdktf/provider-google/lib/storage-bucket-object';
+import { Cloudfunctions2Function } from '@cdktf/provider-google/lib/cloudfunctions2-function';
 
 dotenv.config();
 
@@ -25,6 +31,46 @@ class MyStack extends TerraformStack {
     new GoogleProvider(this, "google", {
       project: PROJECT_ID,
       region: envConfig.region,
+    });
+
+    new ArchiveProvider(this, 'archive', {});
+
+    const bucket = new StorageBucket(this, 'function-bucket', {
+      name: 'cdktf-function-bucket',
+      location: 'ASIA',
+    });
+
+    const archive = new DataArchiveFile(this, 'function-archive', {
+      type: 'zip',
+      sourceDir: path.resolve(__dirname, 'functions'),
+      outputPath: path.resolve(__dirname, 'function.zip'),
+    });
+
+    const object = new StorageBucketObject(this, 'function-object', {
+      name: 'function.zip',
+      bucket: bucket.name,
+      source: archive.outputPath,
+    });
+
+    new Cloudfunctions2Function(this, 'hello-function', {
+      name: 'hello-function',
+      location: envConfig.region,
+      buildConfig: {
+        runtime: 'python312',
+        entryPoint: 'hello_world',
+        source: {
+          storageSource: {
+            bucket: bucket.name,
+            object: object.name,
+          },
+        },
+      },
+      serviceConfig: {
+        maxInstanceCount: 1,
+        availableMemory: '256M',
+        timeoutSeconds: 60,
+        ingressSettings: 'ALLOW_ALL',
+      },
     });
 
     new StorageBucket(this, "bucket", {

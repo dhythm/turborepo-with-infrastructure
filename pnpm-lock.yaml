@@ -140,6 +140,9 @@ importers:
         specifier: ^10.4.2
         version: 10.4.2
     devDependencies:
+      '@cdktf/provider-archive':
+        specifier: ^10.3.0
+        version: 10.3.0(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -368,6 +371,13 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@cdktf/provider-archive@10.3.0':
+    resolution: {integrity: sha512-y5kAiCs+Ow0tOywsSx4OSME2a6VzCsvbkGMCXfyOCwJdoZN01yAIyLyVjtx/R25Vj20Q7EMC6zkE81dXSAh4Tw==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      cdktf: ^0.20.0
+      constructs: ^10.3.0
 
   '@cdktf/provider-google@14.32.0':
     resolution: {integrity: sha512-mgH18XD8eJ9kDKzlIxOZSXeWfkI4H6SaijDZa1wmEQGj6ZgwsstH/6yF6jimsfIqjh1Y+sxVHnSjt0u8wwHAOQ==}
@@ -3414,6 +3424,11 @@ snapshots:
       '@babel/helper-validator-identifier': 7.27.1
 
   '@bcoe/v8-coverage@0.2.3': {}
+
+  '@cdktf/provider-archive@10.3.0(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)':
+    dependencies:
+      cdktf: 0.20.12(constructs@10.4.2)
+      constructs: 10.4.2
 
   '@cdktf/provider-google@14.32.0(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)':
     dependencies:
