@@ -1,9 +1,10 @@
+import * as dotenv from 'dotenv';
 import { Construct } from "constructs";
 import { App, TerraformStack, TerraformOutput, LocalBackend } from "cdktf";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
-import { TerraformVariable } from "cdktf";
 
+dotenv.config();
 
 interface EnvConfig {
   projectId: string;
@@ -19,12 +20,10 @@ class MyStack extends TerraformStack {
     super(scope, env);
     const envConfig: EnvConfig = scope.node.tryGetContext(env);
 
-    const projectId = new TerraformVariable(this, "PROJECT_ID", {
-      type: "string",
-    });
+    const PROJECT_ID = process.env.PROJECT_ID;
 
     new GoogleProvider(this, "google", {
-      project: projectId.value,
+      project: PROJECT_ID,
       region: envConfig.region,
     });
 

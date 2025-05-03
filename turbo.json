@@ -10,6 +10,9 @@
     "synth": {
       "outputs": []
     },
+    "diff": {
+      "outputs": []
+    },
     "deploy": {
       "outputs": []
     },

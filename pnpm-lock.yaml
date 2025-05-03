@@ -131,8 +131,8 @@ importers:
   packages/infra:
     dependencies:
       '@cdktf/provider-google':
-        specifier: ^4.0.0
-        version: 4.0.5(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)
+        specifier: 14.32.0
+        version: 14.32.0(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)
       cdktf:
         specifier: ^0.20.12
         version: 0.20.12(constructs@10.4.2)
@@ -146,6 +146,9 @@ importers:
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.15.3)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.8.3))
@@ -366,12 +369,12 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@cdktf/provider-google@4.0.5':
-    resolution: {integrity: sha512-tugo19ITjKEpd80OWGEdy/zcTkFcoztl2yk+0umXHVjdgRu536WxxV/7hBYsQMaK7v8mynzueOGIs3s0M7xUOw==}
-    engines: {node: '>= 14.17.0'}
+  '@cdktf/provider-google@14.32.0':
+    resolution: {integrity: sha512-mgH18XD8eJ9kDKzlIxOZSXeWfkI4H6SaijDZa1wmEQGj6ZgwsstH/6yF6jimsfIqjh1Y+sxVHnSjt0u8wwHAOQ==}
+    engines: {node: '>= 18.12.0'}
     peerDependencies:
-      cdktf: ^0.14.0
-      constructs: ^10.0.0
+      cdktf: ^0.20.0
+      constructs: ^10.3.0
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1325,6 +1328,10 @@ packages:
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -3408,7 +3415,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@cdktf/provider-google@4.0.5(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)':
+  '@cdktf/provider-google@14.32.0(cdktf@0.20.12(constructs@10.4.2))(constructs@10.4.2)':
     dependencies:
       cdktf: 0.20.12(constructs@10.4.2)
       constructs: 10.4.2
@@ -4547,6 +4554,8 @@ snapshots:
       no-case: 2.3.2
 
   dotenv@16.0.3: {}
+
+  dotenv@16.5.0: {}
 
   dunder-proto@1.0.1:
     dependencies:
