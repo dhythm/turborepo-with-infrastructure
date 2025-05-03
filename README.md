@@ -36,9 +36,9 @@ To get started:
 - Run a command twice to hit cache
 ```
 
-## Preparing tools
+## Preparing tools and environments
 
-Run the following command to install tools:
+1. Run the following command to install tools:
 
 ```sh
 npm install -g cdktf-cli
@@ -49,6 +49,17 @@ brew install terraform
 gcloud auth application-default login
 gcloud config get-value project
 ```
+
+2. Enable Google Cloud API to use in CDK like the followings:
+
+   - Cloud Storage API
+   - Cloud Functions API
+   - Compute Engine API
+   - Custom Search API
+   - Vertex AI API
+   - Vision AI API
+   - Cloud Build API
+   - Cloud Run
 
 ## Setting up the environment
 
@@ -80,6 +91,12 @@ pnpm run --filter=infra synth
 
 ```sh
 pnpm run --filter=infra deploy dev
+```
+
+## Access to Cloud Functions
+
+```sh
+curl https://asia-northeast1-<project_id>.cloudfunctions.net/hello-function
 ```
 
 ## Terminate

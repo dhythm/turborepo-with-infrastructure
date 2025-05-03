@@ -9,6 +9,7 @@ import { DataArchiveFile } from '@cdktf/provider-archive/lib/data-archive-file';
 import path = require('path');
 import { StorageBucketObject } from '@cdktf/provider-google/lib/storage-bucket-object';
 import { Cloudfunctions2Function } from '@cdktf/provider-google/lib/cloudfunctions2-function';
+import { CloudRunServiceIamMember } from '@cdktf/provider-google/lib/cloud-run-service-iam-member';
 
 dotenv.config();
 
@@ -42,7 +43,7 @@ class MyStack extends TerraformStack {
 
     const archive = new DataArchiveFile(this, 'function-archive', {
       type: 'zip',
-      sourceDir: path.resolve(__dirname, 'functions'),
+      sourceDir: path.resolve(__dirname, '../python-service/function'),
       outputPath: path.resolve(__dirname, 'function.zip'),
     });
 
@@ -52,7 +53,7 @@ class MyStack extends TerraformStack {
       source: archive.outputPath,
     });
 
-    new Cloudfunctions2Function(this, 'hello-function', {
+    const cloudFunction = new Cloudfunctions2Function(this, 'hello-function', {
       name: 'hello-function',
       location: envConfig.region,
       buildConfig: {
@@ -71,6 +72,14 @@ class MyStack extends TerraformStack {
         timeoutSeconds: 60,
         ingressSettings: 'ALLOW_ALL',
       },
+    });
+
+    // 👇 未認証アクセスを許可する設定を追加
+    new CloudRunServiceIamMember(this, 'allow-unauthenticated', {
+      location: envConfig.region,
+      service: cloudFunction.name,
+      role: 'roles/run.invoker',
+      member: 'allUsers',
     });
 
     new StorageBucket(this, "bucket", {
